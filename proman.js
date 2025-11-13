@@ -198,7 +198,14 @@ jQuery(document).ready(function () {
     if (storedProjects) {
       const parsedProjects = JSON.parse(storedProjects);
       parsedProjects.forEach((project) => {
-        const newProjectIndex = projects.push(project) - 1;
+        const newProject = new Project(
+          project.name,
+          project.description,
+          project.deadline
+        );
+
+        const newProjectIndex = projects.push(newProject) - 1;
+
         createProjectCard(
           project.name,
           project.description,
