@@ -84,6 +84,8 @@ jQuery(document).ready(function () {
       newProjectIndex
     );
 
+    saveProjectsToLocalStorage();
+    console.log(saveProjectsToLocalStorage());
     console.log("Projects created:", projects);
 
     // close the project model
@@ -128,6 +130,9 @@ jQuery(document).ready(function () {
 
     console.log(projectCards);
 
+    // project is edited in the storage
+    saveProjectsToLocalStorage();
+
     projectCard.querySelector("h3").innerText = name;
     projectCard.querySelectorAll("p")[0].innerText = description;
     projectCard.querySelectorAll("p")[1].innerText = `Deadline: ${deadline}`;
@@ -161,6 +166,10 @@ jQuery(document).ready(function () {
       deleteConfirmBtn.onclick = () => {
         projectContainer.removeChild(projectCard);
         projects.splice(projectCard.id, 1);
+
+        // project is deleted from the storage
+        saveProjectsToLocalStorage();
+
         deleteModel.style.display = "none";
       };
       deleteCancelBtn.onclick = () => {
@@ -177,4 +186,30 @@ jQuery(document).ready(function () {
       this.deadline = deadline;
     }
   }
+
+  // Save Projects to Local Storage
+  function saveProjectsToLocalStorage() {
+    localStorage.setItem("projects", JSON.stringify(projects));
+  }
+
+  // Load Projects from Local Storage
+  function loadProjectsFromLocalStorage() {
+    const storedProjects = localStorage.getItem("projects");
+    if (storedProjects) {
+      const parsedProjects = JSON.parse(storedProjects);
+      parsedProjects.forEach((projects) => {
+        createProjectCard(
+          projects.name,
+          projects.description,
+          projects.deadline
+        );
+      });
+    }
+  }
+
+  // Load projects on page load
+  loadProjectsFromLocalStorage();
+
+  // TO DO: Add deadline countdown timer
+  // TO DO: Add deadline date only allow future dates
 });
