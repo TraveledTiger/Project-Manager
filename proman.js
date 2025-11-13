@@ -85,7 +85,6 @@ jQuery(document).ready(function () {
     );
 
     saveProjectsToLocalStorage();
-    console.log(saveProjectsToLocalStorage());
     console.log("Projects created:", projects);
 
     // close the project model
@@ -160,6 +159,7 @@ jQuery(document).ready(function () {
       editDeadline.value = deadline;
       editModel.style.display = "block";
       editModel.id = projectCard.id;
+      console.log(editModel.id);
     } else if (e.target.classList.contains("delete-btn")) {
       const projectCard = e.target.parentElement;
       deleteModel.style.display = "block";
@@ -197,19 +197,40 @@ jQuery(document).ready(function () {
     const storedProjects = localStorage.getItem("projects");
     if (storedProjects) {
       const parsedProjects = JSON.parse(storedProjects);
-      parsedProjects.forEach((projects) => {
+      parsedProjects.forEach((project) => {
+        const newProjectIndex = projects.push(project) - 1;
         createProjectCard(
-          projects.name,
-          projects.description,
-          projects.deadline
+          project.name,
+          project.description,
+          project.deadline,
+          newProjectIndex
         );
       });
     }
+    console.log(projects);
   }
 
   // Load projects on page load
   loadProjectsFromLocalStorage();
 
   // TO DO: Add deadline countdown timer
+
+  // function countdownToDeadline(deadline) {
+  //   const deadlineDate = new Date(deadline);
+
+  //   const currentDate = new Date();
+
+  //   const diffMs = deadlineDate - currentDate;
+
+  //   // Calculate days, hours, minutes, seconds
+  //   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  //   const diffHours = Math.floor(
+  //     (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  //   );
+  //   const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+  //   const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+  //   return `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes  remaining`;
+  // }
   // TO DO: Add deadline date only allow future dates
 });
