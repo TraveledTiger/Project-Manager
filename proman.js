@@ -125,6 +125,7 @@ jQuery(document).ready(function () {
     const name = editName.value;
     const description = editDesc.value;
     const deadline = editDeadline.value;
+    const countDown = countdownToDeadline(editDeadline.value);
 
     const projectId = editModel.id;
 
@@ -144,7 +145,7 @@ jQuery(document).ready(function () {
     projectCard.querySelector("h3").innerText = name;
     projectCard.querySelectorAll("p")[0].innerText = description;
     projectCard.querySelectorAll("p")[1].innerText = `Deadline: ${deadline}`;
-
+    projectCard.querySelectorAll("p")[2].innerText = countDown;
     editModel.style.display = "none";
     editName.value = "";
     editDesc.value = "";
@@ -166,9 +167,9 @@ jQuery(document).ready(function () {
       editName.value = name;
       editDesc.value = description;
       editDeadline.value = deadline;
+
       editModel.style.display = "block";
       editModel.id = projectCard.id;
-      console.log(editModel.id);
     } else if (e.target.classList.contains("delete-btn")) {
       const projectCard = e.target.parentElement;
       deleteModel.style.display = "block";
@@ -243,13 +244,8 @@ jQuery(document).ready(function () {
       (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
     );
     const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
 
-    if (
-      diffDays === 0 &&
-      diffHours === 0 &&
-      (diffMinutes === 0) & (diffSeconds === 0)
-    ) {
+    if (diffDays === 0 && diffHours === 0 && diffMinutes === 0) {
       return "Deadline Has Passed";
     } else {
       return `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes  remaining`;
