@@ -36,6 +36,14 @@ jQuery(document).ready(function () {
   const editDesc = document.getElementById("edit-desc");
   const editDeadline = document.getElementById("edit-deadline");
 
+  // Date restriction to not allow past dates or current date
+  const today = new Date();
+  const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0];
+  projectDeadline.setAttribute("min", tomorrow);
+  editDeadline.setAttribute("min", tomorrow);
+
   // Open the create project model
   createBtn.addEventListener("click", () => {
     projectModel.style.display = "block";
@@ -104,6 +112,7 @@ jQuery(document).ready(function () {
       <h3>${name}</h3>
       <p>${description}</p>
       <p>Deadline: ${deadline}</p>
+      <p>${countdownToDeadline(deadline)}</p>
       <button class='edit-btn pos-layout'>Edit</button>
       <button class='delete-btn neg-layout'>Delete</button>
     </div>
@@ -220,24 +229,30 @@ jQuery(document).ready(function () {
   // Load projects on page load
   loadProjectsFromLocalStorage();
 
-  // TO DO: Add deadline countdown timer
+  // Countdown to deadline function
+  function countdownToDeadline(deadline) {
+    const deadlineDate = new Date(deadline);
 
-  // function countdownToDeadline(deadline) {
-  //   const deadlineDate = new Date(deadline);
+    const currentDate = new Date();
 
-  //   const currentDate = new Date();
+    const diffMs = deadlineDate - currentDate;
 
-  //   const diffMs = deadlineDate - currentDate;
+    // Calculate days, hours, minutes, seconds
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(
+      (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
 
-  //   // Calculate days, hours, minutes, seconds
-  //   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  //   const diffHours = Math.floor(
-  //     (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-  //   );
-  //   const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-  //   const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
-
-  //   return `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes  remaining`;
-  // }
-  // TO DO: Add deadline date only allow future dates
+    if (
+      diffDays === 0 &&
+      diffHours === 0 &&
+      (diffMinutes === 0) & (diffSeconds === 0)
+    ) {
+      return "Deadline Has Passed";
+    } else {
+      return `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes  remaining`;
+    }
+  }
 });
