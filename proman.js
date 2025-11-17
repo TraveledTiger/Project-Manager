@@ -125,7 +125,6 @@ jQuery(document).ready(function () {
     const name = editName.value;
     const description = editDesc.value;
     const deadline = editDeadline.value;
-    const countDown = countdownToDeadline(editDeadline.value);
 
     const projectId = editModel.id;
 
@@ -145,7 +144,6 @@ jQuery(document).ready(function () {
     projectCard.querySelector("h3").innerText = name;
     projectCard.querySelectorAll("p")[0].innerText = description;
     projectCard.querySelectorAll("p")[1].innerText = `Deadline: ${deadline}`;
-    projectCard.querySelectorAll("p")[2].innerText = countDown;
     editModel.style.display = "none";
     editName.value = "";
     editDesc.value = "";
@@ -251,4 +249,15 @@ jQuery(document).ready(function () {
       return `${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes  remaining`;
     }
   }
+
+  // Countdown timer update every minute
+  setInterval(() => {
+    const projectCards = document.querySelectorAll(`.project-card`);
+    projectCards.forEach((card) => {
+      const projectId = card.id;
+      const deadline = projects[projectId].deadline;
+      const countdownText = countdownToDeadline(deadline);
+      card.querySelectorAll("p")[2].innerText = countdownText;
+    });
+  }, 60000);
 });

@@ -120,11 +120,11 @@ h1 {
   background-color: #45a049;
 }
 .neg-layout {
-  background-color: #f44336;
+  background-color: #ad544a;
   color: white;
 }
 .neg-layout:hover {
-  background-color: #da190b;
+  background-color: #9b160c;
 }
 
 .delete-model {
@@ -141,7 +141,8 @@ h1 {
   z-index: 1000;
 }
 
-#project-model input {
+#project-model input,
+.edit-model input {
   display: block;
   width: 100%;
   padding: 10px;
